@@ -46,6 +46,8 @@ object ScalaSourceParser extends RegexParsers with RunParser {
   def argumentTypeGroup = beforeArgumentType ~> typeName <~ opt(afterArgumentType) <~ opt(argumentSeparator) ^^ {case name => RELATED(name)}
   def argumentListTypes = bracketOpen ~> rep(argumentTypeGroup) <~ bracketClose
 
+  // def related = opt(argumentListTypes)~rep(withGroup)~opt(optionalSelf) ^^ {case types~withs~self => types.getOrElse(Nil) ++ withs ++ self.getOrElse(Nil)}
+  // remove the argement list's type, by cnglen
   def related = opt(argumentListTypes)~rep(withGroup)~opt(optionalSelf) ^^ {case types~withs~self => types.getOrElse(Nil) ++ withs ++ self.getOrElse(Nil)}
     
   def parsable : Parser[List[KEYWORD]] = opt(packageGroup)~rep(caseGroup|classGroup|traitGroup|objectGroup|ignored) ^^ {
